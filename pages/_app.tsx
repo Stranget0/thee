@@ -1,12 +1,12 @@
 import type { AppProps } from "next/app";
-import { ScrollProvider } from "../contexts/ScrollContext";
+import Contexts from "../contexts";
 import "../styles/global.scss";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <ScrollProvider>
+    <Contexts>
       <Component {...pageProps} />
-    </ScrollProvider>
+    </Contexts>
   );
 }
 

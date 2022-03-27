@@ -1,7 +1,6 @@
-import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
 import { FC } from "react";
-import { Vector3 } from "three";
 import AppCanvas from "./AppCanvas";
+import AppCamera from "./AppCamera";
 import Helpers from "./Helpers";
 
 interface DebugProps {
@@ -11,11 +10,12 @@ interface DebugProps {
 const Scene: FC<DebugProps> = ({ children, withHelpers }) => {
   return (
     <AppCanvas>
-			
-			{/* TODO remove in prod */}
+      <AppCamera />
+
+      {/* TODO remove in prod */}
       {/* <OrbitControls /> */}
-      
-			{withHelpers && <Helpers />}
+
+      {withHelpers && <Helpers />}
       {children}
     </AppCanvas>
   );
