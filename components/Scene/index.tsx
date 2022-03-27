@@ -11,10 +11,9 @@ interface DebugProps {
 const Scene: FC<DebugProps> = ({ children, withHelpers }) => {
   return (
     <AppCanvas>
-      <PerspectiveCamera makeDefault position={new Vector3(0, 0, 10)} />
 			
 			{/* TODO remove in prod */}
-      <OrbitControls />
+      {/* <OrbitControls /> */}
       
 			{withHelpers && <Helpers />}
       {children}

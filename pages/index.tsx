@@ -1,4 +1,3 @@
-import { Canvas } from "@react-three/fiber";
 import type { NextPage } from "next";
 import Layout from "../components/Layout";
 import AppPointLight from "../components/lib/PointLight";

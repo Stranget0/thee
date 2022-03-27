@@ -7,10 +7,13 @@ interface Props {
 
 const Main = styled.main`
   color: pink;
+	height: 500vh;
 `;
 
 const Layout = ({ children }: Props) => {
-  return <Main>{children}</Main>;
+  return (
+      <Main>{children}</Main>
+  );
 };
 
 export default Layout;

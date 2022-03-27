@@ -13,7 +13,7 @@ const AppCanvas: FC<Props> = ({ children, ...props }) => {
 };
 
 const CanvasWrapper = styled.div`
-  position: absolute;
+  position: fixed;
   inset: 0;
 `;
 
