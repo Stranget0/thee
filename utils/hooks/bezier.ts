@@ -1,38 +1,55 @@
 import bezier from "bezier-easing";
 import { useEffect, useMemo, useRef, useState } from "react";
 
+// TODO move to types.ts
 export type CubicBezierTuple = [number, number, number, number];
-const useBezier = (
+interface Options {
+  initial?: number;
+  minChange?: number;
+}
+type UseBezier = (
   target: number,
-  durationF: (lastValue: number) => number,
+  durationF: number | ((lastValue: number) => number),
   coords: CubicBezierTuple,
-  initial = 0
+  options?: Options
+) => number;
+
+const useBezier: UseBezier = (
+  target,
+  durationF,
+  coords,
+  { initial = 0, minChange } = {}
 ) => {
   const [trans, setTrans] = useState(initial);
-  const startPoint = useRef(0);
-  const from = useRef(initial);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const easing = useMemo(() => bezier(...coords), coords);
+
   useEffect(() => {
-    startPoint.current = Date.now();
-    from.current = trans;
-    const duration = durationF(trans);
+    const nowTime = Date.now();
+    const duration =
+      typeof durationF === "number" ? durationF : durationF(trans);
     let frameId: null | number = null;
+    let lastRenderValue = trans;
+    animate();
 
     function animate() {
       const progress = Math.min(
         1,
-        Math.abs((Date.now() - startPoint.current) / (duration || 1))
+        Math.abs((Date.now() - nowTime) / (duration || 1))
       );
       const easedProgress = easing(progress);
-      setTrans(from.current * (1 - easedProgress) + target * easedProgress);
-      console.log({ progress: easedProgress });
+      const newValue = trans * (1 - easedProgress) + target * easedProgress;
+      if (!minChange || Math.abs(lastRenderValue - newValue) > minChange) {
+        setTrans(trans * (1 - easedProgress) + target * easedProgress);
+        lastRenderValue = newValue;
+      }
       if (progress < 1) frameId = requestAnimationFrame(animate);
     }
-    animate();
+
     return () => {
       if (frameId !== null) cancelAnimationFrame(frameId);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [target, easing]);
   return trans;
 };

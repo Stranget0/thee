@@ -7,7 +7,7 @@ interface Props {
 
 const Main = styled.main`
   color: pink;
-	height: 500vh;
+	height: 5000px;
 `;
 
 const Layout = ({ children }: Props) => {
