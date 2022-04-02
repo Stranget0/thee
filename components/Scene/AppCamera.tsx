@@ -9,12 +9,10 @@ interface Props {}
 
 const AppCamera = ({}: Props) => {
   const scroll = usePageScroll();
-  const posY = useBezier(-scroll * 10, pageScrollMs, pageScrollBezier, {
-    // TODO make adaptive
-    minChange: 0.001,
-  });
 
-  return <PerspectiveCamera makeDefault position={new Vector3(0, posY, 10)} />;
+  return (
+    <PerspectiveCamera makeDefault position={new Vector3(0, scroll, 10)} />
+  );
 };
 
 export default AppCamera;

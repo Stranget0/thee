@@ -7,13 +7,15 @@ import {
   useState,
 } from "react";
 import { throttle, ThrottleSettings } from "lodash";
+import useBezier from "../utils/hooks/bezier";
+import { pageScrollBezier, pageScrollMs } from "../globals";
 
-const ms = 250;
+const ms = 100;
 const options: ThrottleSettings = { trailing:true};
 const scrollContext = createContext<null | number>(null);
 
 export const ScrollProvider: FC = ({ children }) => {
-  const [scroll, setScroll] = useState<null | number>(null);
+  const [scroll, setScroll] = useState(0);
 
   useEffect(() => {
     const updateScroll = throttle(
@@ -30,8 +32,14 @@ export const ScrollProvider: FC = ({ children }) => {
     addEventListener("scroll", updateScroll);
     return () => removeEventListener("scroll", updateScroll);
   }, []);
+
+  const posY = useBezier(-scroll * 10, pageScrollMs, pageScrollBezier, {
+    // TODO make adaptive
+    minChange: 0.001,
+  });
+
   return (
-    <scrollContext.Provider value={scroll}>{children}</scrollContext.Provider>
+    <scrollContext.Provider value={posY}>{children}</scrollContext.Provider>
   );
 };
 export const usePageScroll = () => useContext(scrollContext) ?? 0;

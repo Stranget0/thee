@@ -1,5 +1,5 @@
 import bezier from "bezier-easing";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 // TODO move to types.ts
 export type CubicBezierTuple = [number, number, number, number];
@@ -31,7 +31,7 @@ const useBezier: UseBezier = (
     let frameId: null | number = null;
     let lastRenderValue = trans;
     animate();
-
+		
     function animate() {
       const progress = Math.min(
         1,
@@ -49,8 +49,8 @@ const useBezier: UseBezier = (
     return () => {
       if (frameId !== null) cancelAnimationFrame(frameId);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [target, easing]);
+  }, [target, easing, durationF, minChange]);
+
   return trans;
 };
 
