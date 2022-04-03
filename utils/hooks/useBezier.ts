@@ -22,7 +22,6 @@ function useBezier<T extends number | number[]>(
       const timeNow = Date.now();
       const progress = (timeNow - timeStart) / duration;
       const easedProgress = easing(progress);
-      // let newValue = startPos + (target - startPos) * easedProgress;
       let newValue;
       if (typeof target === "number")
         newValue = updateValue(target, startPos as number, easedProgress);
@@ -30,6 +29,7 @@ function useBezier<T extends number | number[]>(
         newValue = target.map((t, i) =>
           updateValue(t, (startPos as number[])[i], progress)
         );
+
       setValue(newValue as T);
       if (Date.now() < timeStart + duration)
         frameId = requestAnimationFrame(frame);

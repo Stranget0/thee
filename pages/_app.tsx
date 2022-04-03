@@ -1,12 +1,12 @@
 import type { AppProps } from "next/app";
-import Contexts from "../contexts";
+import GlobalContexts from "../contexts";
 import "../styles/global.scss";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <Contexts>
+    <GlobalContexts>
       <Component {...pageProps} />
-    </Contexts>
+    </GlobalContexts>
   );
 }
 

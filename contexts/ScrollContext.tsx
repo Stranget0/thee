@@ -7,6 +7,7 @@ import {
   useMemo,
   useState,
 } from "react";
+import { scrollBezierPoints } from "../types/global";
 import useBezier from "../utils/hooks/useBezier";
 import useIsomorphicEffect from "../utils/hooks/useIsomorphicEffect";
 
@@ -15,8 +16,8 @@ const scrollContext = createContext(initialValue);
 
 export const ScrollProvider: FC<{ duration?: number; throttleMs?: number }> = ({
   children,
-  throttleMs = 150,
-  duration = 750,
+  throttleMs,
+  duration,
 }) => {
   const [target, setTarget] = useState(0);
   const [docHeight, setDocHeight] = useState(0);
@@ -32,9 +33,9 @@ export const ScrollProvider: FC<{ duration?: number; throttleMs?: number }> = ({
     return () => removeEventListener("scroll", updateTarget);
   }, [throttleMs]);
 
-  const scroll = useBezier(target, duration, [0, 0.1, 0.1, 1]);
+  const scroll = useBezier(target, duration ?? 0, scrollBezierPoints);
   const scrollPercent = scroll / docHeight;
-	// TODO use this if performance is hurt
+  // XXX use this if performance is hurt
   // const scrollData = useMemo(
   //   () => ({ scroll, scrollPercent, target }),
   //   [scroll, scrollPercent, target]

@@ -5,10 +5,13 @@ import { usePageScroll } from "../../contexts/ScrollContext";
 interface Props {}
 
 const AppCamera = ({}: Props) => {
-  const {scrollPercent:scroll} = usePageScroll();
-	
+  const { scrollPercent: scroll } = usePageScroll();
+
   return (
-    <PerspectiveCamera makeDefault position={new Vector3(0, -scroll, 10)} />
+    <PerspectiveCamera
+      makeDefault
+      position={new Vector3(0, scroll * -10, 10)}
+    />
   );
 };
 
