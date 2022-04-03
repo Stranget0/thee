@@ -1,11 +1,16 @@
 import bezier from "bezier-easing";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { BezierPoints } from "../../types/global";
 
-function useBezier(target: number, duration: number, points: BezierPoints) {
+const updateValue = (to: number, startPos: number, progress: number) =>
+  startPos + (to - startPos) * progress;
+
+function useBezier<T extends number | number[]>(
+  target: T,
+  duration: number,
+  points: BezierPoints
+): T {
   const [value, setValue] = useState(target);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  // const easing = useMemo(() => bezier(...points), points);
 
   useEffect(() => {
     const easing = bezier(...points);
@@ -13,17 +18,25 @@ function useBezier(target: number, duration: number, points: BezierPoints) {
     let frameId = requestAnimationFrame(frame);
     let startPos = value;
     function frame() {
+      if (!duration) return setValue(target);
       const timeNow = Date.now();
       const progress = (timeNow - timeStart) / duration;
       const easedProgress = easing(progress);
-      let newValue = startPos + easedProgress * (target - startPos);
-      setValue(newValue);
+      // let newValue = startPos + (target - startPos) * easedProgress;
+      let newValue;
+      if (typeof target === "number")
+        newValue = updateValue(target, startPos as number, easedProgress);
+      else
+        newValue = target.map((t, i) =>
+          updateValue(t, (startPos as number[])[i], progress)
+        );
+      setValue(newValue as T);
       if (Date.now() < timeStart + duration)
         frameId = requestAnimationFrame(frame);
     }
     return () => cancelAnimationFrame(frameId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [duration, target]);
+  }, [duration, target, ...points]);
 
   return value;
 }
