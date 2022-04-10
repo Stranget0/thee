@@ -11,12 +11,16 @@ import {
 import { degToRad } from "three/src/math/MathUtils";
 import { useMouse } from "../../contexts/MouseContext";
 import { usePageScroll } from "../../contexts/ScrollContext";
+import { BezierPointsTuple } from "../../types/global";
 import useBezier from "../../utils/hooks/useBezier";
+
+const bezier: BezierPointsTuple = [0,0,0,1];
 
 function Box() {
   const ref = useRef<Mesh<BoxBufferGeometry, MeshStandardMaterial>>();
-  const { clientX: mouseX = 0, clientY: mouseY = 0 } = useMouse();
-  const [x, y] = useBezier([mouseX, mouseY], 300, [0, 0.5, 0.5, 1]);
+  const { x: mouseX, y: mouseY } = useMouse();
+	
+  const [x, y] = useBezier([mouseX, mouseY], 1000, bezier);
   const { scroll } = usePageScroll();
   useEffect(() => {
     const frameId = requestAnimationFrame(() => {

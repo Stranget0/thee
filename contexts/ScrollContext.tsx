@@ -12,12 +12,14 @@ import useBezier from "../utils/hooks/useBezier";
 import useIsomorphicEffect from "../utils/hooks/useIsomorphicEffect";
 
 const initialValue = { scroll: 0, scrollPercent: 0, target: 0 };
-const scrollContext = createContext(initialValue);
 
-export const ScrollProvider: FC<{ duration?: number; throttleMs?: number }> = ({
+export const scrollContext = createContext(initialValue);
+
+const duration = 1500,
+  throttleMs = 50;
+
+export const ScrollProvider: FC = ({
   children,
-  throttleMs,
-  duration,
 }) => {
   const [target, setTarget] = useState(0);
   const [docHeight, setDocHeight] = useState(0);
@@ -31,7 +33,7 @@ export const ScrollProvider: FC<{ duration?: number; throttleMs?: number }> = ({
     updateTarget();
     addEventListener("scroll", updateTarget);
     return () => removeEventListener("scroll", updateTarget);
-  }, [throttleMs]);
+  }, []);
 
   const scroll = useBezier(target, duration ?? 0, scrollBezierPoints);
   const scrollPercent = scroll / docHeight;

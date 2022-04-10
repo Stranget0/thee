@@ -1,11 +1,24 @@
+import { useContextBridge } from "@react-three/drei";
 import { FC } from "react";
-import { MouseProvider } from "./MouseContext";
-import { ScrollProvider } from "./ScrollContext";
+import { mouseContext, MouseProvider } from "./MouseContext";
+import { scrollContext, ScrollProvider } from "./ScrollContext";
 
-const GlobalContexts: FC = ({ children }) => {
-  return (
-    <ScrollProvider duration={700} throttleMs={50}>
-      <MouseProvider>{children}</MouseProvider>
+const GlobalContexts: FC = ({ children }) => (
+  <ScrollProvider>
+    <MouseProvider>{children}</MouseProvider>
+  </ScrollProvider>
+);
+
+export const contextsToBridge = [mouseContext];
+export const CanvasContexts: FC = ({ children }) => {
+  // const ContextBridge = useContextBridge(...contextsToBridge);
+	return (
+    <ScrollProvider>
+      <MouseProvider>
+        {/* <ContextBridge> */}
+					{children}
+					{/* </ContextBridge> */}
+      </MouseProvider>
     </ScrollProvider>
   );
 };
